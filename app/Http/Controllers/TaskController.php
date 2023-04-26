@@ -8,21 +8,10 @@ use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    /**
-     * Create the controller instance.
-     */
-    public function __construct()
-    {
-        $this->authorizeResource(Task::class, 'task');
-    }
-
     public function index()
     {
         $tasks = Task::query()
             ->with('user')
-            ->when(auth()->user()->isEmployee(), function ($query) {
-                return $query->whereUserId(auth()->id());
-            })
             ->get();
 
         return view('task-index', compact('tasks'));
